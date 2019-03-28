@@ -97,8 +97,8 @@ app.get("/profile", function(req, res) {
 
 // get homepage
 app.get("/home", function(req, res) {
-    if (req.session.user) {
-        var username = req.session.user;
+    var username = req.session.user;
+    if (username) {
         res.render("home.ejs", {"username": username})
     } else {
         res.redirect("/");
@@ -107,8 +107,10 @@ app.get("/home", function(req, res) {
 
 // route to go to upload page if user is logged in
 app.get("/upload", function(req, res){
-    if (req.session.user) {
-        res.redirect("http://localhost:8082/upload.html");
+    var username = req.session.user;
+    if (username) {
+        res.render("upload.ejs", {"username": username})
+        //res.redirect("http://localhost:8082/upload.html");
     } else {
         res.redirect("http://localhost:8082/login.html");
     }
@@ -116,16 +118,19 @@ app.get("/upload", function(req, res){
 
 // route to upload images
 app.post("/upload", function(req, res) {
+    var username = req.session.user;
     var file = req.files.uploadedImage;
     console.log(file);
     file.mv("assets/uploads/"+file.name);
-    res.render("upload.ejs", {"myFile": file.name});
+    //res.render("upload.ejs", {"myFile": file.name});
+    res.render("reupload.ejs", {"myFile": file.name, "username": username});
 });
 
 // logout and redirect to home.
 app.get("/logout", function(req, res) {
     req.session.destroy();
-    res.redirect("/");
+    res.render("logout.ejs");
+    //res.redirect("/");
 });
 
 

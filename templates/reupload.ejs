@@ -16,9 +16,10 @@
 
 <body>
 <h1>Upload page</h1>
+<p>Hi <%= username %>! Your image has been successfully uploaded:</p>
+<img src="/uploads/<%= myFile %>">
 
-<p>Hi <%= username %>! Do you want to upload an image?</p>
-
+<p>Do you want to upload another file?</p>
 <form action="/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="uploadedImage">
     <input type="submit">
