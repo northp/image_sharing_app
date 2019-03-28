@@ -20,15 +20,15 @@ button {
     font-size: 1em;
     cursor: pointer;
     margin: auto;
-    width: 32%;
+    width: 24%;
 }
 
 
 p, h1, nav, ul, table, form, img{
-    padding: 1.5em;
+    padding: 1em;
     text-align: center;
     border-radius: 1em;
-    width: 40%;
+    width: 75%;
     margin: auto;
     background-color:#251111;
     color: white;
