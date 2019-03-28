@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="Index.css" />
+</head>
+
+<nav>
+    <ul>
+        <button><a href="http://localhost:8082/">Homepage</a> </button>
+        <button><a href="http://localhost:8082/profile">Profile</a> </button>
+        <button><a href="http://localhost:8082/upload">Upload</a> </button>
+    </ul>
+</nav>
+
+<body>
+<h1>Upload page</h1>
+
+<p>Upload Image?</p>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="uploadedImage">
+    <input type="submit">
+</form>
+
+
+</body>
+</html>

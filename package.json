@@ -1,0 +1,20 @@
+{
+  "name": "image_sharing_app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Peter Francis North",
+  "license": "Unlicense",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.1.3-alpha.1",
+    "express-session": "^1.15.6",
+    "mysql": "^2.16.0"
+  },
+  "devDependencies": {},
+  "description": ""
+}
