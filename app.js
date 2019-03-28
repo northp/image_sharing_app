@@ -61,7 +61,7 @@ app.post("/login", function(req, res) {
             res.redirect("http://localhost:8082/login.html");
         } else if (results.length > 0) {
             req.session.user = username;
-            res.render("profile.ejs", {"username": username});
+            res.render("home.ejs", {"username": username});
         }
     })
 });
@@ -77,6 +77,9 @@ app.post("/signup", function(req, res){
         if (error){
             console.log(sql);
             res.render("error.ejs");
+        }
+        else if (results.length == 0){
+            res.redirect("http://localhost:8082/signup.html")
         }
         else {
             req.session.user = username;
@@ -95,7 +98,7 @@ app.get("/profile", function(req, res) {
     }
 });
 
-// get homepage
+// get homepage, render ejs if user logged in
 app.get("/home", function(req, res) {
     var username = req.session.user;
     if (username) {
@@ -110,30 +113,44 @@ app.get("/upload", function(req, res){
     var username = req.session.user;
     if (username) {
         res.render("upload.ejs", {"username": username})
-        //res.redirect("http://localhost:8082/upload.html");
     } else {
         res.redirect("http://localhost:8082/login.html");
     }
 });
 
+// route to upload images - backup
+//app.post("/upload", function(req, res) {
+//    var username = req.session.user;
+//    var file = req.files.uploadedImage;
+//    console.log(file);
+//    file.mv("assets/uploads/"+file.name);
+//    res.render("reupload.ejs", {"myFile": file.name, "username": username});
+//});
+
 // route to upload images
 app.post("/upload", function(req, res) {
-    var username = req.session.user;
     var file = req.files.uploadedImage;
-    console.log(file);
-    file.mv("assets/uploads/"+file.name);
-    //res.render("upload.ejs", {"myFile": file.name});
-    res.render("reupload.ejs", {"myFile": file.name, "username": username});
+    var filename = file.name;
+    var username = req.session.user;
+    var dateOfUpload = new Date();
+    var sql = `INSERT INTO uploads (filename, username, uploadDate) VALUES ("${filename}", "${username}", "${dateOfUpload}")`;
+    connection.query(sql, function(error, results){
+        if (error){
+            console.log(sql);
+            res.render("error.ejs");
+        }
+        else {
+            file.mv("assets/uploads/"+file.name);
+            res.render("reupload.ejs", {"myFile": file.name, "username": username});
+        }
+    })
 });
 
 // logout and redirect to home.
 app.get("/logout", function(req, res) {
     req.session.destroy();
     res.render("logout.ejs");
-    //res.redirect("/");
 });
-
-
 
 // configure port, start server
 var port = 8082;
