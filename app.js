@@ -78,9 +78,9 @@ app.post("/signup", function(req, res){
             console.log(sql);
             res.render("error.ejs");
         }
-        else if (results.length == 0){
+        /*else if (results.length == 0){
             res.redirect("http://localhost:8082/signup.html")
-        }
+        }*/
         else {
             req.session.user = username;
             res.render("profile.ejs", {"username": username});

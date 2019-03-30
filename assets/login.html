@@ -2,24 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login Page</title>
-    <link rel="stylesheet" type="text/css" href="Index.css" />
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+    <link href="Index.css" rel="stylesheet" type="text/css"/>
+    <title>Login/Sign up</title>
 </head>
-<nav>
-    <ul>
-        <button><a href="http://localhost:8082/">Home</a> </button>
-        <button><a href="http://localhost:8082/login.html">Login</a> </button>
-        <button><a href="http://localhost:8082/signup.html">Sign Up</a> </button>
-        <button><a href="http://localhost:8082/upload">Upload</a> </button>
-    </ul>
+<body>
+<nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+    <div class="container">
+        <button class="navbar-toggler" data-target="#Navbar" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img src="logo.png" height="30" width="30"></a>
+        <div class="collapse navbar-collapse" id="Navbar">
+            <ul class="navbar-nav  mr-auto">
+                <li class="nav-item"><a class="nav-link" href="http://localhost:8082/">Home</a></li>
+                <li class="nav-item active"><a class="nav-link" href="http://localhost:8082/login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><span class="http://localhost:8082/upload">Upload</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
 
-<body>
+
 <h1>Login page</h1>
+
+<p>Enter your username and password to log in.</p>
+
 <form action="/login" method="post">
-    <div>Username: <input type="text" name="username"></div>
-    <div>Password: <input type="password" name="password"></div>
+    <div>Username: <input name="username" type="text"></div>
+    <div>Password: <input name="password" type="password"></div>
     <div><input type="submit"></div>
 </form>
+
+<p>Don't have an account? Sign up!</p>
+
+<form action="/signup" method="post">
+    <div>First name: <input name="firstname" type="text"></div>
+    <div>Surname: <input name="surname" type="text"></div>
+    <div>Username: <input name="username" type="text"></div>
+    <div>Password: <input name="password" type="password"></div>
+    <div><input type="submit"></div>
+</form>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 offset-1 col-sm-8">
+                <h3>Our Address</h3>
+                <address>
+                    69 IMG Shop<br>
+                    Mos Eisley Spaceport<br>
+                    TATTOINE<br>
+                    <i class="fa fa-phone fa-sm"></i>: +123456789<br>
+                    <i class="fa fa-envelope fa-sm"></i>: <a href="mailto:img_tattoine@rimouter.space">img_tattoine@rimouter.space</a>
+                </address>
+            </div>
+            <div class="col">
+                <h3>Links</h3>
+                <ul class="list-unstyled">
+                    <li><a href="http://localhost:8082/home">Home</a></li>
+                    <li><a href="http://localhost:8082/login">Login</a></li>
+                    <li><a href="http://localhost:8082/upload">Upload</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <p>© Copyright 2035 IMG Shop, Tattoine</p>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
