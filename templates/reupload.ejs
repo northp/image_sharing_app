@@ -27,10 +27,22 @@
         </div>
     </div>
 </nav>
-<h1>Upload page</h1>
-<p>Hi <%= username %>! Your image has been successfully uploaded:</p>
-<img src="/uploads/<%= myFile %>">
 
+<header class="jumbotron">
+    <div class="container">
+        <div class="row row-header">
+            <div class="col-12 col-sm-6">
+                <h1>Upload page</h1>
+            </div>
+            <div class="col-12 col-sm align-self-center">
+                <p>Hi <%= username %>! Your image has been successfully uploaded!</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<img src="/uploads/<%= myFile %>">
 <p>Do you want to upload another file?</p>
 <form action="/upload" method="post" enctype="multipart/form-data">
     <input type="file" name="uploadedImage">
