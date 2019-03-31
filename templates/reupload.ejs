@@ -41,15 +41,32 @@
     </div>
 </header>
 
+<div class="container">
+    <div class="row row-content">
+        <img src="uploads/<%= myFile %>">
+        <h2>Do you want to upload another file?</h2>
+    </div>
+    <div class="col col-md-6">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group row">
+                <div class="col">
+                    <input class="form" id="upload" name="upload" placeholder="Upload" type="file">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row row-content">
+        <div class="col col-md-6">
+            <p>Want to log out? Click <a href="http://localhost:8082/logout">here</a>.</p>
+        </div>
+    </div>
+</div>
 
-<img src="/uploads/<%= myFile %>">
-<p>Do you want to upload another file?</p>
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="uploadedImage">
-    <input type="submit">
-</form>
-
-<p><a href="http://localhost:8082/logout">LOGOUT</a> </p>
 
 <footer class="footer">
     <div class="container">

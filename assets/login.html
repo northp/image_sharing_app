@@ -17,7 +17,8 @@
         <button class="navbar-toggler" data-target="#Navbar" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img src="logo.png" height="30" width="30"></a>
+        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img height="30" src="logo.png"
+                                                                               width="30"></a>
         <div class="collapse navbar-collapse" id="Navbar">
             <ul class="navbar-nav  mr-auto">
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/">Home</a></li>
@@ -43,21 +44,59 @@
 </header>
 
 
-<form action="/login" method="post">
-    <div>Username: <input name="username" type="text"></div>
-    <div>Password: <input name="password" type="password"></div>
-    <div><input type="submit"></div>
-</form>
+<div class="container">
+    <div class="row row-content">
+        <h2> Enter your username and password to log in.</h2>
+    </div>
+    <div class="col col-md-6">
+        <form action="/login" method="post">
+            <div class="form-group row">
+                <div class="col">
+                    <input class="form-control" id="username" name="username" placeholder="User Name" type="text">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <input class="form-control" id="password" name="password" placeholder="Password" type="password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row row-content">
+        <h2>Don't have an account? Sign up!</h2>
+    </div>
+    <div class="col">
+        <form action="/signup" method="post">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <input class="form-control" id="firstname" name="firstname" placeholder="First Name" type="text">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" id="surname" name="surname" placeholder="Surname" type="text">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <input class="form-control" name="username" placeholder="Username" type="text">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" name="password" placeholder="Password" type="password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-<p>Don't have an account? Sign up!</p>
-
-<form action="/signup" method="post">
-    <div>First name: <input name="firstname" type="text"></div>
-    <div>Surname: <input name="surname" type="text"></div>
-    <div>Username: <input name="username" type="text"></div>
-    <div>Password: <input name="password" type="password"></div>
-    <div><input type="submit"></div>
-</form>
 
 <footer class="footer">
     <div class="container">

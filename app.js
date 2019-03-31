@@ -129,7 +129,7 @@ app.get("/upload", function(req, res){
 
 // route to upload images
 app.post("/upload", function(req, res) {
-    var file = req.files.uploadedImage;
+    var file = req.files.upload;
     var filename = file.name;
     var username = req.session.user;
     var dateOfUpload = new Date();
@@ -140,6 +140,7 @@ app.post("/upload", function(req, res) {
             res.render("error.ejs");
         }
         else {
+            console.log(sql);
             file.mv("assets/uploads/"+file.name);
             res.render("reupload.ejs", {"myFile": file.name, "username": username});
         }
