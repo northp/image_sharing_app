@@ -136,11 +136,9 @@ app.post("/upload", function(req, res) {
     var sql = `INSERT INTO uploads (filename, username, uploadDate) VALUES ("${filename}", "${username}", "${dateOfUpload}")`;
     connection.query(sql, function(error, results){
         if (error){
-            console.log(sql);
             res.render("error.ejs");
         }
         else {
-            console.log(sql);
             file.mv("assets/uploads/"+file.name);
             res.render("reupload.ejs", {"myFile": file.name, "username": username});
         }
@@ -152,6 +150,25 @@ app.get("/logout", function(req, res) {
     req.session.destroy();
     res.render("logout.ejs");
 });
+
+// a get route to display archive of images uploaded to the site
+app.get("/home/archive", function(req, res){
+    var sql = `SELECT filename FROM uploads ORDER BY uploadDate DESC`;
+    connection.query(sql, function(error, results){
+        if(error) {
+            res.render("error.ejs");
+        }
+        else if(results.length == 0) {
+            res.render("archiveEmpty.ejs");
+        } else if (results.length > 0) {
+            //console.log(results);
+            
+            res.render("archive.ejs");
+        }
+    })
+});
+
+
 
 // configure port, start server
 var port = 8082;

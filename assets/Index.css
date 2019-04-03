@@ -19,6 +19,7 @@
     margin: 0px auto;
     background: #D1C4E9;
     color: black;
+    min-height: 225px;
 }
 
 .address{
@@ -34,4 +35,8 @@ body {
 
 .navbar-dark, .btn-success {
     background-color: #519000;
+}
+
+h3 {
+    font-size: 110%;
 }
