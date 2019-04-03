@@ -9,7 +9,7 @@
     <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
     <link href="../Index.css" rel="stylesheet" type="text/css"/>
-    <title>Archive Empty</title>
+    <title><%= userID %>'s Uploads</title>
 </head>
 <body>
 <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
@@ -17,13 +17,12 @@
         <button class="navbar-toggler" data-target="#Navbar" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img height="30" src="../logo.png" width="30"></a>
+        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img src="../logo.png" height="30" width="30"></a>
         <div class="collapse navbar-collapse" id="Navbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active"><a class="nav-link" href="http://localhost:8082/home"><span><i class="fa fa-home fa-lg"></i></span> Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="http://localhost:8082/home"><span><i class="fa fa-home fa-lg"></i></span> Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/profile">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="http://localhost:8082/upload">Upload</a>
-                </li>
+                <li class="nav-item active"><a class="nav-link" href="http://localhost:8082/upload">Upload</a></li>
             </ul>
         </div>
     </div>
@@ -33,26 +32,39 @@
     <div class="container">
         <div class="row row-header">
             <div class="col-12 col-sm-6">
-                <h1>IMG, the Image Sharing App!</h1>
+                <h1><%= userID %>'s 'Uploads</h1>
             </div>
             <div class="col-12 col-sm align-self-center">
-                <p>There are no uploads yet :(</p>
+                <p>See all images uploaded by this user below:</p>
+
             </div>
         </div>
     </div>
 </header>
 
+
 <div class="container">
     <div class="row row-content align-items-center">
-        <div class="col col-sm-4">
-            <h2>much empty</h2>
-        </div>
-    </div>
-    <div class="col col-sm-4 align-self-center">
-        <p>Head on over to our <a href="http://localhost:8082/login">login</a> page to start your journey!</p>
-        <p>You can upload your images <a href="http://localhost:8082/upload">here</a>.</p>
+        <% for(var i = 0; i < images.length; i++) { %>
+            <div class="col col-md-4 col-sm-6">
+                <img src="../uploads/<%= images[i].filename %>" alt="<%= images[i].filename %>" width="200" height="200">
+            </div>
+            <div class="col col-md-8 col-sm-6">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th scope="row">Image Name</th>
+                    </tr>
+                    <tr>
+                        <td><a href="http://localhost:8082/image/<%= images[i].filename %>"><%= images[i].filename %></a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
     </div>
 </div>
+
 
 <footer class="footer">
     <div class="container">

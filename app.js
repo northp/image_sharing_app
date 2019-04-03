@@ -173,6 +173,25 @@ app.get("/home/archive", function(req, res){
 });
 
 
+// a get route to display all images uploaded by a specific user
+app.get("/profile/:id", function (req, res){
+    var username = req.params.id;
+    var sql = `SELECT filename FROM uploads where username = "${username}" ORDER BY uploadDate DESC`;
+    connection.query(sql, function(error, results){
+        if (error){
+            res.render("error.ejs");
+        }else if (results.length > 0) {
+
+            var profileUploads = [results.length];
+            for(var result in results){
+                console.log(results);
+                profileUploads[result] = results[result];
+            }
+            res.render("profileUploads.ejs", {"images": profileUploads, "userID": username});
+        }
+    })
+});
+
 // a get route to see all info about a certain image
 app.get("/image/:id", function (req, res) {
     var filename = req.params.id;
@@ -180,19 +199,31 @@ app.get("/image/:id", function (req, res) {
     connection.query(sql, function(error, results){
         if (error){
             res.render("error.ejs");
-        }else if (results.length = 0){
+        }else if (results.length == 0){
             res.render("error.ejs");
-        }else {
-            var info = [results.length];
-            for(var result in results){
-                info[result] = results[result];
-                console.log(info[result].filename);
-            }
+        }else if (results) {
+            var info = results;
             res.render("image.ejs", {"info": info, "filename": info}); // create this ejs
         }
     })
 });
 
+
+// a get route to list all user profiles
+app.get("/users", function(req, res){
+   var sql =  `SELECT username FROM users`;
+   connection.query(sql, function(error, results){
+       if (error){
+           res.render("error.ejs");
+       }else if (results){
+           var userList = [results.length];
+           for(var result in results){
+               userList[result] = results[result];
+           }
+           res.render("users.ejs", {"Users": userList}); // create this ejs
+       }
+   })
+});
 
 // configure port, start server
 var port = 8082;

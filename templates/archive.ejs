@@ -51,7 +51,7 @@
             </div>
             <div class="col col-md-8 col-sm-6">
                 <p>Image name: <a href="http://localhost:8082/image/<%= uploads[i].filename %>"><%= uploads[i].filename %></a></p>
-                <p>Uploaded by: <%= uploads[i].username %> </p>
+                <p>Uploaded by: <a href="http://localhost:8082/profile/<%= uploads[i].username %>"><%= uploads[i].username %></a></p>
             </div>
         <% } %>
     </div>

@@ -9,7 +9,7 @@
     <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
     <link href="../Index.css" rel="stylesheet" type="text/css"/>
-    <title>Upload</title>
+    <title><%= info[0].filename %> Info</title>
 </head>
 <body>
 <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
@@ -32,10 +32,11 @@
     <div class="container">
         <div class="row row-header">
             <div class="col-12 col-sm-6">
-                <h1>asdsa</h1>
+                <h1>Specific Image</h1>
             </div>
             <div class="col-12 col-sm align-self-center">
-                <img src="../uploads/<%= info[0].filename %>" alt="<%= info[0].filename %>" width="200" height="200">
+                <p>See information about the selected image below:</p>
+
             </div>
         </div>
     </div>
@@ -46,12 +47,42 @@
 <div class="container">
     <div class="row row-content align-items-center">
             <div class="col col-md-4 col-sm-6">
-
+                <img src="../uploads/<%= info[0].filename %>" alt="<%= info[0].filename %>" width="200" height="200">
             </div>
             <div class="col col-md-8 col-sm-6">
+
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th scope="row">File Name</th>
+                        <td><%= info[0].filename %></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Username</th>
+                        <td><%= info[0].username %></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Upload Date</th>
+                        <td><%= info[0].uploadDate %></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Number of Likes</th>
+                        <td><%= info[0].totalLikes %></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Number of Comments</th>
+                        <td><%= info[0].totalComments %></td>
+                    </tr>
+                    </tbody>
+                </table>
+
             </div>
     </div>
 </div>
+
+
+
+
 
 
 
