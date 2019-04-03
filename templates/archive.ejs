@@ -17,10 +17,11 @@
         <button class="navbar-toggler" data-target="#Navbar" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img height="30" src="logo.png" width="30"></a>
+        <a class="navbar-brand mr-auto" href="http://localhost:8082/home"><img height="30" src="../logo.png" width="30"></a>
         <div class="collapse navbar-collapse" id="Navbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active"><a class="nav-link" href="http://localhost:8082/home"><span><i class="fa fa-home fa-lg"></i></span> Home</a></li>
+                <li class="nav-item active"><a class="nav-link" href="http://localhost:8082/home"><span><i
+                                    class="fa fa-home fa-lg"></i></span> Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/profile">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><span class="http://localhost:8082/upload">Upload</a>
                 </li>
@@ -33,7 +34,7 @@
     <div class="container">
         <div class="row row-header">
             <div class="col-12 col-sm-6">
-                <h1>IMG, the Image Sharing App!</h1>
+                <h1>Image Archive</h1>
             </div>
             <div class="col-12 col-sm align-self-center">
                 <p>Take a look at some of the uploads on the site!</p>
@@ -44,14 +45,18 @@
 
 <div class="container">
     <div class="row row-content align-items-center">
-        <div class="col col-sm-4">
-            <h2>lorum ispium</h2>
-        </div>
-    </div>
-    <div class="col col-sm-4 align-self-center">
-        <p>test place for results</p>
+        <% for(var i = 0; i < uploads.length; i++) { %>
+            <div class="col col-md-4 col-sm-6">
+                <img src="../uploads/<%= uploads[i].filename %>" alt="<%= uploads[i].filename %>" width="200" height="200">
+            </div>
+            <div class="col col-md-8 col-sm-6">
+                <p>Image name: <a href="http://localhost:8082/image/<%= uploads[i].filename %>"><%= uploads[i].filename %></a></p>
+                <p>Uploaded by: <%= uploads[i].username %> </p>
+            </div>
+        <% } %>
     </div>
 </div>
+
 
 <footer class="footer">
     <div class="container">

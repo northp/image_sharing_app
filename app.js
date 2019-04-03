@@ -151,9 +151,10 @@ app.get("/logout", function(req, res) {
     res.render("logout.ejs");
 });
 
+
 // a get route to display archive of images uploaded to the site
 app.get("/home/archive", function(req, res){
-    var sql = `SELECT filename FROM uploads ORDER BY uploadDate DESC`;
+    var sql = `SELECT filename, username FROM uploads ORDER BY uploadDate DESC`;
     connection.query(sql, function(error, results){
         if(error) {
             res.render("error.ejs");
@@ -161,13 +162,36 @@ app.get("/home/archive", function(req, res){
         else if(results.length == 0) {
             res.render("archiveEmpty.ejs");
         } else if (results.length > 0) {
-            //console.log(results);
-            
-            res.render("archive.ejs");
+
+            var archive = [results.length];
+            for(var result in results){
+                archive[result] = results[result];
+            }
+            res.render("archive.ejs", {"uploads": archive, "uploader": archive});
         }
     })
 });
 
+
+// a get route to see all info about a certain image
+app.get("/image/:id", function (req, res) {
+    var filename = req.params.id;
+    var sql = `SELECT * FROM uploads where filename = "${filename}"`;
+    connection.query(sql, function(error, results){
+        if (error){
+            res.render("error.ejs");
+        }else if (results.length = 0){
+            res.render("error.ejs");
+        }else {
+            var info = [results.length];
+            for(var result in results){
+                info[result] = results[result];
+                console.log(info[result].filename);
+            }
+            res.render("image.ejs", {"info": info, "filename": info}); // create this ejs
+        }
+    })
+});
 
 
 // configure port, start server
