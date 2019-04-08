@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="Navbar">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/home"><span><i class="fa fa-home fa-lg"></i></span> Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="http://localhost:8082/profile">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="http://localhost:8082/profile">Profile</a></li>
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/upload">Upload</a></li>
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/users">Users</a></li>
                 <li class="nav-item"><a class="nav-link" href="http://localhost:8082/home/archive">Archive</a></li>
@@ -45,6 +45,8 @@
 </header>
 
 
+
+
 <div class="container">
     <div class="row row-content align-items-center">
         <% for(var i = 0; i < images.length; i++) { %>
@@ -56,9 +58,7 @@
                     <tbody>
                     <tr>
                         <th scope="row">Image Name</th>
-                    </tr>
-                    <tr>
-                        <td><a href="http://localhost:8082/image/<%= images[i].filename %>"><%= images[i].filename %></a></td>
+                        <td style="width: 75%"><a href="http://localhost:8082/image/<%= images[i].filename %>"><%= images[i].filename %></a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -66,6 +66,9 @@
         <% } %>
     </div>
 </div>
+
+
+
 
 
 <footer class="footer">
@@ -98,4 +101,8 @@
     </div>
 </footer>
 </body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="../ajax.js" ></script>
 </html>

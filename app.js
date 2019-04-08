@@ -22,6 +22,12 @@ app.use(session({
 }));
 app.use(fileUpload());
 
+app.use(function(request, response, next) {
+    console.log(request.url);
+    next();
+});
+
+
 // // configure database connection - tcd
 // var connection = mysql.createConnection({
 //     host: "mysql.scss.tcd.ie",
@@ -207,6 +213,42 @@ app.get("/image/:id", function (req, res) {
         }
     })
 });
+
+
+// test - AJAX
+app.get("/like", function(req, res){
+    var sql =  `SELECT totalLikes FROM uploads`;
+    connection.query(sql, function(error, results){
+        if (error){
+            res.render("error.ejs");
+        }else if (results){
+            var number = results[0];
+            res.json(number.totalLikes);
+        }
+    })
+});
+
+
+
+// test route to see if I can get image details by ID for ajax calls.
+// work off this one, might be promising for post route:
+// check username against details of image.
+// Also check against a likes table to see if he has already liked this id
+app.get("/image/:id/like", function (req, res) {
+    var filename = req.params.id;
+    var sql = `SELECT * FROM uploads where filename = "${filename}"`;
+    connection.query(sql, function(error, results){
+        if (error){
+            res.render("error.ejs");
+        }else if (results.length == 0){
+            res.render("error.ejs");
+        }else if (results) {
+            var info = results;
+            res.json(info);
+        }
+    })
+});
+
 
 
 // a get route to list all user profiles
