@@ -11,7 +11,7 @@
     <link href="../Index.css" rel="stylesheet" type="text/css"/>
     <title><%= info[0].filename %> Info</title>
 </head>
-<body onload="countLikes()">
+<body onload="getTotalLikes(`<%= info[0].filename %>`)">
 <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
     <div class="container">
         <button class="navbar-toggler" data-target="#Navbar" data-toggle="collapse" type="button">
@@ -44,47 +44,45 @@
 </header>
 
 
-
 <div class="container">
     <div class="row row-content align-items-center">
-            <div class="col col-md-4 col-sm-6">
-                <img src="../uploads/<%= info[0].filename %>" alt="<%= info[0].filename %>" width="200" height="200">
-            </div>
-            <div class="col col-md-8 col-sm-6">
+        <div class="col col-md-4 col-sm-6">
+            <img src="../uploads/<%= info[0].filename %>" alt="<%= info[0].filename %>" width="200" height="200">
+        </div>
+        <div class="col col-md-8 col-sm-6">
 
-                <table class="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <th scope="row">File Name</th>
-                        <td><%= info[0].filename %></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Username</th>
-                        <td><%= info[0].username %></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Upload Date</th>
-                        <td><%= info[0].uploadDate %></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Number of Likes</th>
-                        <td><p id="test"></p></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Number of Comments</th>
-                        <td><%= info[0].totalComments %></td>
-                    </tr>
-                    </tbody>
-                </table>
-
-            </div>
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <th scope="row">File Name</th>
+                    <td><%= info[0].filename %></td>
+                </tr>
+                <tr>
+                    <th scope="row">Username</th>
+                    <td><%= info[0].username %></td>
+                </tr>
+                <tr>
+                    <th scope="row">Upload Date</th>
+                    <td><%= info[0].uploadDate %></td>
+                </tr>
+                <tr>
+                    <th scope="row">Number of Likes</th>
+                    <td><p id="likes">not working</p></td>
+                </tr>
+                <tr>
+                    <th scope="row">Number of Comments</th>
+                    <td><p id="comments">0</p></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col col-md-4 col-sm-6">
+            <!--this part works-->
+            <button onclick="getTotalLikes(`<%= info[0].filename %>`)" class="btn-warning">Like</button>
+            <button class="btn-warning">Comment</button>
+        </div>
     </div>
 </div>
-
-
-
-
-
 
 
 
@@ -118,8 +116,13 @@
     </div>
 </footer>
 </body>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 <script src="../ajax.js"></script>
 </html>

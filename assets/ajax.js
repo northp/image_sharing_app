@@ -1,30 +1,49 @@
 "use strict";
 
 
-function countLikes(){
+
+function getTotalLikes(filename){
     $.ajax( {
-            url: "http://localhost:8082/like",
+            // url: "http://localhost:8082/image/totalLikes/:id",
+            url: `http://localhost:8082/image/totalLikes/${filename}`,
             success: function(result) {
                 console.log(result);
-                $("#test").empty();
+                $("#likes").empty();
                 var phrase = document.createElement("p");
                 $(phrase).text(result);
-                $(phrase).appendTo($("#test"));
+                $(phrase).appendTo($("#likes"));
             }
         }
     );
 }
+
+
+
+
+// function likeImage(){
+//     $.ajax({
+//         url: "http://localhost:8082/image/:id",
+//         success: function(result){
+//             $("#liked").empty();
+//             var phrase = document.createElement("p");
+//             $(phrase).text(result);
+//             $(phrase).appendTo($("#liked"));
+//         }
+//     })
+// }
 //
-// function getImageData(){
+//
+// function getTotalComments(){
 //     $.ajax( {
-//             url: "http://localhost:8082/like/:id/like",
+//             url: "http://localhost:8082/comment",
 //             success: function(result) {
 //                 console.log(result);
-//                 $("#test").empty();
+//                 $("#comments").empty();
 //                 var phrase = document.createElement("p");
 //                 $(phrase).text(result);
-//                 $(phrase).appendTo($("#test"));
+//                 $(phrase).appendTo($("#comments"));
 //             }
 //         }
 //     );
 // }
+

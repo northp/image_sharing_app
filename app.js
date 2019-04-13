@@ -139,7 +139,7 @@ app.post("/upload", function(req, res) {
     var filename = file.name;
     var username = req.session.user;
     var dateOfUpload = new Date();
-    var sql = `INSERT INTO uploads (filename, username, uploadDate) VALUES ("${filename}", "${username}", "${dateOfUpload}")`;
+    var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES ("${filename}", "${username}", "${dateOfUpload}", "${0}","${0}")`;
     connection.query(sql, function(error, results){
         if (error){
             res.render("error.ejs");
@@ -160,7 +160,7 @@ app.get("/logout", function(req, res) {
 
 // a get route to display archive of images uploaded to the site
 app.get("/home/archive", function(req, res){
-    var sql = `SELECT filename, username FROM uploads ORDER BY uploadDate DESC`;
+    var sql = `SELECT filename, username, totalLikes, totalComments FROM uploads ORDER BY uploadDate DESC`;
     connection.query(sql, function(error, results){
         if(error) {
             res.render("error.ejs");
@@ -173,7 +173,7 @@ app.get("/home/archive", function(req, res){
             for(var result in results){
                 archive[result] = results[result];
             }
-            res.render("archive.ejs", {"uploads": archive, "uploader": archive});
+            res.render("archive.ejs", {"uploads": archive});
         }
     })
 });
@@ -194,6 +194,8 @@ app.get("/profile/:id", function (req, res){
                 profileUploads[result] = results[result];
             }
             res.render("profileUploads.ejs", {"images": profileUploads, "userID": username});
+        }else if(results.length==0){
+            res.render("profileUploadsEmpty.ejs", {"userID": username});
         }
     })
 });
@@ -215,19 +217,60 @@ app.get("/image/:id", function (req, res) {
 });
 
 
-// test - AJAX
-app.get("/like", function(req, res){
-    var sql =  `SELECT totalLikes FROM uploads`;
+
+
+
+
+
+
+// test route for comments - need to change
+app.get("/comment", function(req, res){
+    var sql =  `SELECT totalComments FROM uploads`;
     connection.query(sql, function(error, results){
         if (error){
             res.render("error.ejs");
         }else if (results){
             var number = results[0];
-            res.json(number.totalLikes);
+            res.json(number.totalComments);
         }
     })
 });
 
+
+
+////backup
+// test route for  total likes - need to change
+app.get("/image/totalLikes/:id", function(req, res){
+    var filename = req.params.id;
+    var sql =  `SELECT totalLikes from uploads WHERE filename = "${filename}"`;
+    connection.query(sql, function(error, results){
+        if (error){
+            res.render("error.ejs");
+        }else if (results.length>0){
+            console.log(results);
+            console.log(`http://localhost:8082/image/totalLikes/${filename}`);
+            res.json(results[0].totalLikes);
+        }
+    })
+});
+
+
+// test
+// get - this is a great route to run when a page loads. Get to see all the likes on an image so far.
+app.get("/like_status_get", function(req,res){
+    var username = req.session.user;
+    var filename = req.params.id;
+    var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
+    connection.query(SQL, function(error, results){
+        if(error){
+            console.log(error);
+            res.render("error.ejs");
+        } else if (results.length>0) {
+            console.log(results)
+            res.json(results[0].like_status);
+        }
+    })
+});
 
 
 // test route to see if I can get image details by ID for ajax calls.
@@ -235,12 +278,11 @@ app.get("/like", function(req, res){
 // check username against details of image.
 // Also check against a likes table to see if he has already liked this id
 app.get("/image/:id/like", function (req, res) {
+    var username = req.session.user;
     var filename = req.params.id;
-    var sql = `SELECT * FROM uploads where filename = "${filename}"`;
+    var sql = `SELECT liked_image, like_status FROM likes WHERE liker = "${username}" AND liked_image = "${filename}";`
     connection.query(sql, function(error, results){
         if (error){
-            res.render("error.ejs");
-        }else if (results.length == 0){
             res.render("error.ejs");
         }else if (results) {
             var info = results;
@@ -248,7 +290,6 @@ app.get("/image/:id/like", function (req, res) {
         }
     })
 });
-
 
 
 // a get route to list all user profiles
@@ -271,3 +312,11 @@ app.get("/users", function(req, res){
 var port = 8082;
 app.listen(port);
 console.log("Server running on http://localhost:"+port);
+
+
+
+
+
+
+
+
