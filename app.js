@@ -1,5 +1,6 @@
 "use strict";
 
+
 // require middleware
 var express = require("express");
 var mysql = require("mysql");
@@ -38,6 +39,7 @@ app.use(function(request, response, next) {
 
 // configure database connection - local MAMP
 var connection = mysql.createConnection({
+    multipleStatements: true,
     host: "localhost",
     user: "root",
     password: "root",
@@ -83,11 +85,7 @@ app.post("/signup", function(req, res){
         if (error){
             console.log(sql);
             res.render("error.ejs");
-        }
-        /*else if (results.length == 0){
-            res.redirect("http://localhost:8082/signup.html")
-        }*/
-        else {
+        } else {
             req.session.user = username;
             res.render("profile.ejs", {"username": username});
         }
@@ -124,14 +122,6 @@ app.get("/upload", function(req, res){
     }
 });
 
-// route to upload images - backup
-//app.post("/upload", function(req, res) {
-//    var username = req.session.user;
-//    var file = req.files.uploadedImage;
-//    console.log(file);
-//    file.mv("assets/uploads/"+file.name);
-//    res.render("reupload.ejs", {"myFile": file.name, "username": username});
-//});
 
 // route to upload images
 app.post("/upload", function(req, res) {
@@ -218,28 +208,23 @@ app.get("/image/:id", function (req, res) {
 
 
 
-
-
-
-
-
-// test route for comments - need to change
-app.get("/comment", function(req, res){
-    var sql =  `SELECT totalComments FROM uploads`;
+// a get route to list all user profiles
+app.get("/users", function(req, res){
+    var sql =  `SELECT username FROM users`;
     connection.query(sql, function(error, results){
         if (error){
             res.render("error.ejs");
         }else if (results){
-            var number = results[0];
-            res.json(number.totalComments);
+            var userList = [results.length];
+            for(var result in results){
+                userList[result] = results[result];
+            }
+            res.render("users.ejs", {"Users": userList}); // create this ejs
         }
     })
 });
 
-
-
-////backup
-// test route for  total likes - need to change
+// get route to query DB for total likes relative to a specific upload
 app.get("/image/totalLikes/:id", function(req, res){
     var filename = req.params.id;
     var sql =  `SELECT totalLikes from uploads WHERE filename = "${filename}"`;
@@ -254,59 +239,136 @@ app.get("/image/totalLikes/:id", function(req, res){
     })
 });
 
-
-// test
-// get - this is a great route to run when a page loads. Get to see all the likes on an image so far.
-app.get("/like_status_get", function(req,res){
+// get route to see if a logged in user has liked an image.
+// says "Liked!" if they have, "Like?" if they haven't. "Like" if no session data.
+app.get("/image/checkLikeStatus/:id", function(req,res){
     var username = req.session.user;
     var filename = req.params.id;
-    var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
-    connection.query(SQL, function(error, results){
-        if(error){
-            console.log(error);
-            res.render("error.ejs");
-        } else if (results.length>0) {
-            console.log(results)
-            res.json(results[0].like_status);
-        }
-    })
+    if(username){
+        var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
+        connection.query(SQL, function(error, results){
+            if(error){
+                console.log(error);
+                res.render("error.ejs");
+            } else if (results.length>0) {
+                console.log(results);
+                if(results[0].like_status == 1){
+                    res.json("Liked!");
+                } else if(results[0].like_status == 0){
+                    res.json("Like?");
+                }
+            }
+        })
+    }
 });
 
-
-// test route to see if I can get image details by ID for ajax calls.
-// work off this one, might be promising for post route:
-// check username against details of image.
-// Also check against a likes table to see if he has already liked this id
-app.get("/image/:id/like", function (req, res) {
+// get route to like an image. If a user is logged in,
+// this route also checks if they have liked an image before.
+// If they press the like button again, it will be unliked.
+// this needs to be updated so that it uses multiple SQL statements:
+// update likes and update uploads
+app.get("/image/like/:id", function(req,res){
     var username = req.session.user;
     var filename = req.params.id;
-    var sql = `SELECT liked_image, like_status FROM likes WHERE liker = "${username}" AND liked_image = "${filename}";`
+    if(username){
+        var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
+        connection.query(SQL, function(error, results){
+            if(error){
+                console.log(error);
+                res.render("error.ejs");
+            }else if(results.length==0){
+                var SQL_INSERT = `INSERT INTO likes (liker, liked_image, like_status) VALUES("${username}", "${filename}", '1');
+                UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = "${filename}";`;
+                connection.query(SQL_INSERT, function(error){
+                    if (error){
+                        console.log(error);
+                    } else {
+                        console.log("Inserted new like row for this user and this image, set like_status to 1");
+                    }
+                })
+                res.json('Liked!');
+            } else if(results.length == 1){
+                if (results[0].like_status == 1) {
+                    var SQL_Update = `UPDATE likes SET like_status = like_status-1 WHERE liker = "${username}" AND liked_image = "${filename}";
+                                        UPDATE uploads SET totalLikes = totalLikes-1 WHERE filename = "${filename}";`;
+                    connection.query(SQL_Update, function (error) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Updated to 0, decrement results[0].like_status");
+                        }
+                    })
+                } else if (results[0].like_status == 0) {
+                    SQL_Update = `UPDATE likes SET like_status = like_status+1 WHERE liker = "${username}" AND liked_image = "${filename}";
+                                    UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = "${filename}";`;
+                    connection.query(SQL_Update, function (error) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Updated to 1, increment results[0].like_status");
+                        }
+                    })
+                }
+                if(results[0].like_status == 1){
+                    res.json("Like?");
+                } else if(results[0].like_status == 0){
+                    res.json("Liked!");
+                }
+            }
+        })
+    }
+});
+
+// get route to query DB for total comments relative to a specific upload
+app.get("/image/totalComments/:id", function(req, res){
+    var filename = req.params.id;
+    var sql =  `SELECT totalComments from uploads WHERE filename = "${filename}"`;
     connection.query(sql, function(error, results){
         if (error){
             res.render("error.ejs");
-        }else if (results) {
-            var info = results;
-            res.json(info);
+        }else if (results.length>0){
+            console.log(results);
+            console.log(`http://localhost:8082/image/totalComments/${filename}`);
+            res.json(results[0].totalComments);
         }
     })
 });
 
 
-// a get route to list all user profiles
-app.get("/users", function(req, res){
-   var sql =  `SELECT username FROM users`;
-   connection.query(sql, function(error, results){
-       if (error){
+app.get("/image/getComments/:id", function(req, res){
+   var filename = req.params.id;
+   var SQL = `SELECT commenter, comment FROM comments WHERE commented_image = "${filename}";`;
+   connection.query(SQL, function(error, results){
+       if(error){
            res.render("error.ejs");
-       }else if (results){
-           var userList = [results.length];
-           for(var result in results){
-               userList[result] = results[result];
-           }
-           res.render("users.ejs", {"Users": userList}); // create this ejs
+       } else {
+           console.log(results);
+           res.json(results);
        }
    })
 });
+
+// get route to add a comment
+app.get("/image/comment/:id", function(req, res){
+    var username = req.session.user;
+    var filename = req.params.id;
+    var comment = req.body.comment;
+    if(username){
+        var sql = `INSERT INTO comments (commenter, commented_image, comment) VALUES ("${username}", "${filename}", "${comment}";
+                UPDATE uploads SET totalComments = totalComments+1 WHERE filename = "${filename}";`;
+        connection.query(sql, function(error, results){
+            if (error){
+                res.render("error.ejs");
+            }
+            else {
+                res.json(document.getElementById("comment").value);
+            }
+        })
+    }
+});
+
+
+
 
 // configure port, start server
 var port = 8082;
