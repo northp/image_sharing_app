@@ -69,10 +69,10 @@ function displayComments(filename){
                 for (var i in result){
                     var commenter = document.createElement("h3");
                     $(commenter).text(result[i].commenter + " says: ");
-                    $(commenter).appendTo($("#test"));
+                    $(commenter).appendTo($("#display"));
                     var comment = document.createElement("p");
                     $(comment).text(result[i].comment);
-                    $(comment).appendTo($("#test"));
+                    $(comment).appendTo($("#display"));
                 }
 
             }
@@ -81,16 +81,22 @@ function displayComments(filename){
 };
 
 function postComment(filename){
-    $.ajax( {
-            url: `http://localhost:8082/image/comment/${filename}`,
-            success: function(result) {
-                console.log(result);
-                $("#postComment").empty();
-                var phrase = document.createElement("p");
-                $(phrase).text(result);
-                $(phrase).appendTo($("#postComment"));
-            }
+    $.ajax({
+        url: `http://localhost:8082/image/comment/${filename}`,
+        data: {value: $("#mytext").val()},
+        method: "POST",
+        success: function (result){
+            console.log(result);
+            var commenter = document.createElement("h3");
+            $(commenter).text(result['user'] + " says: ");
+            $(commenter).appendTo($("#display"));
+            var comment = document.createElement("p");
+            $(comment).text(result['text']);
+            $(comment).appendTo($("#display"));
         }
-    )
+    })
 };
+
+
+
 

@@ -334,7 +334,7 @@ app.get("/image/totalComments/:id", function(req, res){
     })
 });
 
-
+// display all comments made on a specific image
 app.get("/image/getComments/:id", function(req, res){
    var filename = req.params.id;
    var SQL = `SELECT commenter, comment FROM comments WHERE commented_image = "${filename}";`;
@@ -348,26 +348,30 @@ app.get("/image/getComments/:id", function(req, res){
    })
 });
 
-// get route to add a comment
-app.get("/image/comment/:id", function(req, res){
-    var username = req.session.user;
+
+
+// post route to post comments if user is logged in
+app.post("/image/comment/:id", function(req, res){
     var filename = req.params.id;
-    var comment = req.body.comment;
+    var comment = req.body.value;
+    var username = req.session.user;
     if(username){
-        var sql = `INSERT INTO comments (commenter, commented_image, comment) VALUES ("${username}", "${filename}", "${comment}";
-                UPDATE uploads SET totalComments = totalComments+1 WHERE filename = "${filename}";`;
-        connection.query(sql, function(error, results){
+        var SQL = `INSERT INTO comments (commenter, commented_image, comment) VALUES ("${username}", "${filename}", "${comment}");
+        UPDATE uploads SET totalComments = totalComments+1 WHERE filename = "${filename}";`;
+        connection.query(SQL, function(error){
             if (error){
-                res.render("error.ejs");
-            }
-            else {
-                res.json(document.getElementById("comment").value);
+                console.log(error);
+            } else {
+                console.log(comment);
+                res.json({
+                    'text': comment,
+                    'user': username
+                });
+
             }
         })
     }
 });
-
-
 
 
 // configure port, start server

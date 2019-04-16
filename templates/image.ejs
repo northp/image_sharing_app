@@ -82,16 +82,16 @@
     </div>
     <div class="row row-content align-items-center">
         <div class="col">
-            <form action="/image/comment/`<%= info[0].filename %>`" method="get">
+            <form action="/image/comment/`<%= info[0].filename %>`" method="post">
                 <div class="form-group row">
-                    <label for="feedback" class="col col-md-8 col-sm-6 col-form-label">Add a comment?</label>
+                    <label for="comment" class="col col-md-8 col-sm-6 col-form-label">Add a comment?</label>
                     <div class="col-md-12">
-                        <textarea class="form-control" id="comment" name="comment" type="text" rows="4"></textarea>
+                        <textarea class="form-control" id="mytext" name="comment" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class=" col">
-                        <button onclick="postComment(`<%= info[0].filename %>`)" type="submit" class="btn btn-success">Submit</button>
+                        <button onclick="postComment(`<%= info[0].filename %>`)" type="button" class="btn btn-success">Submit</button>
                     </div>
                 </div>
                 <div>
@@ -100,13 +100,30 @@
                 </div>
                 <table class ="table table-bordered">
                     <tbody>
-                    <tr id="test">
+                    <tr id="display">
                     </tr>
                 </table>
             </form>
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<!--<div>-->
+    <!--<p id="test"></p>-->
+    <!--<input autocomplete='false' autofocus class="mytext" required type="text" />-->
+    <!--<button onclick="postComment(`<%= info[0].filename %>`,`<%= info[0].username %>`)">Click here!</button>-->
+<!--</div>-->
+
+
+
+
+
+
 
 <footer class="footer">
     <div class="container">
