@@ -60,8 +60,10 @@ connection.connect(function(error){
 app.post("/login", function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
-    var sql = `SELECT * FROM users WHERE username = "${username}" AND password = "${password}"`;
-    connection.query(sql, function(error, results){
+    // var sql = `SELECT * FROM users WHERE username = "${username}" AND password = "${password}"`;
+    // connection.query(sql, function(error, results){
+    var sql = `SELECT * FROM users WHERE username = ? AND password = ?`;
+    connection.query(sql, [username, password], function(error, results){
         if(error) {
             res.render("error.ejs");
         }
@@ -74,14 +76,22 @@ app.post("/login", function(req, res) {
     })
 });
 
+
+
+
+
+
+
 // a route to allow a person to sign up as a user (this creates a user in the database)
 app.post("/signup", function(req, res){
     var firstname = req.body.firstname;
     var surname = req.body.surname;
     var username = req.body.username;
     var password = req.body.password;
-    var sql = `INSERT INTO users (firstname, surname, username, password) VALUES ("${firstname}", "${surname}", "${username}", "${password}")`;
-    connection.query(sql, function(error, results){
+    //var sql = `INSERT INTO users (firstname, surname, username, password) VALUES ("${firstname}", "${surname}", "${username}", "${password}")`;
+    //connection.query(sql, function(error, results){
+    var sql = `INSERT INTO users (firstname, surname, username, password) VALUES (?, ?, ?, ?)`;
+    connection.query(sql,[firstname, surname, username, password], function(error){
         if (error){
             console.log(sql);
             res.render("error.ejs");
@@ -91,6 +101,9 @@ app.post("/signup", function(req, res){
         }
     })
 });
+
+
+
 
 // get user profle if user is logged in
 app.get("/profile", function(req, res) {
@@ -129,8 +142,10 @@ app.post("/upload", function(req, res) {
     var filename = file.name;
     var username = req.session.user;
     var dateOfUpload = new Date();
-    var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES ("${filename}", "${username}", "${dateOfUpload}", "${0}","${0}")`;
-    connection.query(sql, function(error, results){
+    // var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES ("${filename}", "${username}", "${dateOfUpload}", "${0}","${0}")`;
+    // connection.query(sql, function(error, results){
+    var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES (?, ?, ?, ?, ?)`;
+    connection.query(sql,[filename, username, dateOfUpload, 0, 0], function(error, results){
         if (error){
             res.render("error.ejs");
         }
@@ -172,8 +187,10 @@ app.get("/home/archive", function(req, res){
 // a get route to display all images uploaded by a specific user
 app.get("/profile/:id", function (req, res){
     var username = req.params.id;
-    var sql = `SELECT filename FROM uploads where username = "${username}" ORDER BY uploadDate DESC`;
-    connection.query(sql, function(error, results){
+    // var sql = `SELECT filename FROM uploads where username = "${username}" ORDER BY uploadDate DESC`;
+    // connection.query(sql, function(error, results){
+    var sql = `SELECT filename FROM uploads where username = ? ORDER BY uploadDate DESC`;
+    connection.query(sql, [username], function(error, results){
         if (error){
             res.render("error.ejs");
         }else if (results.length > 0) {
@@ -193,8 +210,10 @@ app.get("/profile/:id", function (req, res){
 // a get route to see all info about a certain image
 app.get("/image/:id", function (req, res) {
     var filename = req.params.id;
-    var sql = `SELECT * FROM uploads where filename = "${filename}"`;
-    connection.query(sql, function(error, results){
+    // var sql = `SELECT * FROM uploads where filename = "${filename}"`;
+    // connection.query(sql, function(error, results){
+    var sql = `SELECT * FROM uploads where filename = ?`;
+    connection.query(sql, [filename], function(error, results){
         if (error){
             res.render("error.ejs");
         }else if (results.length == 0){
@@ -227,8 +246,10 @@ app.get("/users", function(req, res){
 // get route to query DB for total likes relative to a specific upload
 app.get("/image/totalLikes/:id", function(req, res){
     var filename = req.params.id;
-    var sql =  `SELECT totalLikes from uploads WHERE filename = "${filename}"`;
-    connection.query(sql, function(error, results){
+    // var sql =  `SELECT totalLikes from uploads WHERE filename = "${filename}"`;
+    // connection.query(sql, function(error, results){
+    var sql =  `SELECT totalLikes from uploads WHERE filename = ?`;
+    connection.query(sql, [filename], function(error, results){
         if (error){
             res.render("error.ejs");
         }else if (results.length>0){
@@ -245,8 +266,10 @@ app.get("/image/checkLikeStatus/:id", function(req,res){
     var username = req.session.user;
     var filename = req.params.id;
     if(username){
-        var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
-        connection.query(SQL, function(error, results){
+        // var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
+        // connection.query(SQL, function(error, results){
+        var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = ? AND liked_image = ?`;
+        connection.query(SQL, [username, filename],function(error, results){
             if(error){
                 console.log(error);
                 res.render("error.ejs");
@@ -271,15 +294,20 @@ app.get("/image/like/:id", function(req,res){
     var username = req.session.user;
     var filename = req.params.id;
     if(username){
-        var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
-        connection.query(SQL, function(error, results){
+        // var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = "${username}" AND liked_image = "${filename}"`;
+        // connection.query(SQL, function(error, results){
+        var SQL = `SELECT liker, liked_image, like_status from likes WHERE liker = ? AND liked_image = ?`;
+        connection.query(SQL, [username, filename], function(error, results){
             if(error){
                 console.log(error);
                 res.render("error.ejs");
             }else if(results.length==0){
-                var SQL_INSERT = `INSERT INTO likes (liker, liked_image, like_status) VALUES("${username}", "${filename}", '1');
-                UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = "${filename}";`;
-                connection.query(SQL_INSERT, function(error){
+                // var SQL_INSERT = `INSERT INTO likes (liker, liked_image, like_status) VALUES("${username}", "${filename}", '1');
+                // UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = "${filename}";`;
+                // connection.query(SQL_INSERT, function(error){
+                var SQL_INSERT = `INSERT INTO likes (liker, liked_image, like_status) VALUES(?, ?, ?);
+                UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = ?;`;
+                connection.query(SQL_INSERT, [username, filename, 1, filename], function(error){
                     if (error){
                         console.log(error);
                     } else {
@@ -289,9 +317,12 @@ app.get("/image/like/:id", function(req,res){
                 res.json('Liked!');
             } else if(results.length == 1){
                 if (results[0].like_status == 1) {
-                    var SQL_Update = `UPDATE likes SET like_status = like_status-1 WHERE liker = "${username}" AND liked_image = "${filename}";
-                                        UPDATE uploads SET totalLikes = totalLikes-1 WHERE filename = "${filename}";`;
-                    connection.query(SQL_Update, function (error) {
+                    // var SQL_Update = `UPDATE likes SET like_status = like_status-1 WHERE liker = "${username}" AND liked_image = "${filename}";
+                    //                     UPDATE uploads SET totalLikes = totalLikes-1 WHERE filename = "${filename}";`;
+                    //connection.query(SQL_Update, function (error) {
+                    var SQL_Update = `UPDATE likes SET like_status = like_status-1 WHERE liker = ? AND liked_image = ?;
+                                        UPDATE uploads SET totalLikes = totalLikes-1 WHERE filename = ?;`;
+                    connection.query(SQL_Update, [username, filename, filename], function (error) {
                         if (error) {
                             console.log(error);
                         } else {
@@ -299,9 +330,12 @@ app.get("/image/like/:id", function(req,res){
                         }
                     })
                 } else if (results[0].like_status == 0) {
-                    SQL_Update = `UPDATE likes SET like_status = like_status+1 WHERE liker = "${username}" AND liked_image = "${filename}";
-                                    UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = "${filename}";`;
-                    connection.query(SQL_Update, function (error) {
+                    // SQL_Update = `UPDATE likes SET like_status = like_status+1 WHERE liker = "${username}" AND liked_image = "${filename}";
+                    //                 UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = "${filename}";`;
+                    // connection.query(SQL_Update, function (error) {
+                    SQL_Update = `UPDATE likes SET like_status = like_status+1 WHERE liker = ? AND liked_image = ?;
+                                    UPDATE uploads SET totalLikes = totalLikes+1 WHERE filename = ?;`;
+                    connection.query(SQL_Update, [username, filename, filename], function (error) {
                         if (error) {
                             console.log(error);
                         } else {
@@ -322,8 +356,10 @@ app.get("/image/like/:id", function(req,res){
 // get route to query DB for total comments relative to a specific upload
 app.get("/image/totalComments/:id", function(req, res){
     var filename = req.params.id;
-    var sql =  `SELECT totalComments from uploads WHERE filename = "${filename}"`;
-    connection.query(sql, function(error, results){
+    // var sql =  `SELECT totalComments from uploads WHERE filename = "${filename}"`;
+    // connection.query(sql, function(error, results){
+    var sql =  `SELECT totalComments from uploads WHERE filename = ?`;
+    connection.query(sql, [filename], function(error, results){
         if (error){
             res.render("error.ejs");
         }else if (results.length>0){
@@ -337,8 +373,10 @@ app.get("/image/totalComments/:id", function(req, res){
 // display all comments made on a specific image
 app.get("/image/getComments/:id", function(req, res){
    var filename = req.params.id;
-   var SQL = `SELECT commenter, comment FROM comments WHERE commented_image = "${filename}";`;
-   connection.query(SQL, function(error, results){
+   // var SQL = `SELECT commenter, comment FROM comments WHERE commented_image = "${filename}";`;
+   // connection.query(SQL, function(error, results){
+    var SQL = `SELECT commenter, comment FROM comments WHERE commented_image = ?;`;
+    connection.query(SQL, [filename], function(error, results){
        if(error){
            res.render("error.ejs");
        } else {
@@ -356,9 +394,12 @@ app.post("/image/comment/:id", function(req, res){
     var comment = req.body.value;
     var username = req.session.user;
     if(username){
-        var SQL = `INSERT INTO comments (commenter, commented_image, comment) VALUES ("${username}", "${filename}", "${comment}");
-        UPDATE uploads SET totalComments = totalComments+1 WHERE filename = "${filename}";`;
-        connection.query(SQL, function(error){
+        // var SQL = `INSERT INTO comments (commenter, commented_image, comment) VALUES ("${username}", "${filename}", "${comment}");
+        // UPDATE uploads SET totalComments = totalComments+1 WHERE filename = "${filename}";`;
+        // connection.query(SQL, function(error){
+        var SQL = `INSERT INTO comments (commenter, commented_image, comment) VALUES (?, ?, ?);
+        UPDATE uploads SET totalComments = totalComments+1 WHERE filename = ?;`;
+        connection.query(SQL, [username, filename, comment, filename], function(error){
             if (error){
                 console.log(error);
             } else {
