@@ -83,7 +83,7 @@ function displayComments(filename){
 function postComment(filename){
     $.ajax({
         url: `http://localhost:8082/image/comment/${filename}`,
-        data: {value: $("#mytext").val()},
+        data: {value: $("#textEntry").val()},
         method: "POST",
         success: function (result){
             console.log(result);

@@ -28,15 +28,6 @@ app.use(function(request, response, next) {
     next();
 });
 
-
-// // configure database connection - tcd
-// var connection = mysql.createConnection({
-//     host: "mysql.scss.tcd.ie",
-//     user: "northp",
-//     password: "hahle1Op",
-//     database: "northp_db"
-// });
-
 // configure database connection - local MAMP
 var connection = mysql.createConnection({
     multipleStatements: true,
@@ -76,12 +67,6 @@ app.post("/login", function(req, res) {
     })
 });
 
-
-
-
-
-
-
 // a route to allow a person to sign up as a user (this creates a user in the database)
 app.post("/signup", function(req, res){
     var firstname = req.body.firstname;
@@ -90,20 +75,26 @@ app.post("/signup", function(req, res){
     var password = req.body.password;
     //var sql = `INSERT INTO users (firstname, surname, username, password) VALUES ("${firstname}", "${surname}", "${username}", "${password}")`;
     //connection.query(sql, function(error, results){
-    var sql = `INSERT INTO users (firstname, surname, username, password) VALUES (?, ?, ?, ?)`;
-    connection.query(sql,[firstname, surname, username, password], function(error){
-        if (error){
-            console.log(sql);
-            res.render("error.ejs");
-        } else {
-            req.session.user = username;
-            res.render("profile.ejs", {"username": username});
-        }
-    })
+    if(
+        ((/^(?!.*[0-9])(?=.*[a-zA-Z])(?!.*[#$^+=!*()@%&"])([a-zA-Z]+).{1,}$/.test(firstname) )==false) || // Firstname must have at least 1 letter, at least 1 character in length, no more than 30
+        ((/^(?!.*[0-9])(?=.*[a-zA-Z])(?!.*[#$^+=!*()@%&"])([a-zA-z]+).{1,}$/.test(surname) )==false) || // Surname must have at least 1 letter, at least 1 character in length, no more than 30
+        ((/^(?=.*[0-9])(?=.*[a-zA-Z])(?!.*[#$^+=!*()@%&"])([a-zA-Z0-9]+).{4,}$/.test(username) )==false) || // Username must have at least 1 number, at least 1 letter, at least 4 characters in length
+        ((/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[#$^+=!*()@%&"])([a-zA-Z0-9#$^+=!*()@%&]+).{8,}$/.test(password) )==false)// Password must have at least 1 number, at least 1 letter, at least 1 special character, at least 8 characters in length
+    ){
+        res.render("signupError.ejs");
+    } else {
+        var sql = `INSERT INTO users (firstname, surname, username, password) VALUES (?, ?, ?, ?)`;
+        connection.query(sql,[firstname, surname, username, password], function(error){
+            if (error){
+                console.log(sql);
+                res.render("error.ejs");
+            } else {
+                req.session.user = username;
+                res.render("profile.ejs", {"username": username});
+            }
+        })
+    }
 });
-
-
-
 
 // get user profle if user is logged in
 app.get("/profile", function(req, res) {
@@ -386,8 +377,6 @@ app.get("/image/getComments/:id", function(req, res){
    })
 });
 
-
-
 // post route to post comments if user is logged in
 app.post("/image/comment/:id", function(req, res){
     var filename = req.params.id;
@@ -402,6 +391,7 @@ app.post("/image/comment/:id", function(req, res){
         connection.query(SQL, [username, filename, comment, filename], function(error){
             if (error){
                 console.log(error);
+                res.render("error.ejs");
             } else {
                 console.log(comment);
                 res.json({

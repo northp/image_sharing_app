@@ -9,9 +9,9 @@
     <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
     <link href="../Index.css" rel="stylesheet" type="text/css"/>
-    <title><%= info[0].filename %> Info</title>
+    <title>Signup Error</title>
 </head>
-<body onload="getTotalLikes(`<%= info[0].filename %>`); getLikeStatus(`<%= info[0].filename %>`); getTotalComments(`<%= info[0].filename %>`);displayComments(`<%= info[0].filename %>`);">
+<body>
 <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
     <div class="container">
         <button class="navbar-toggler" data-target="#Navbar" data-toggle="collapse" type="button">
@@ -34,10 +34,10 @@
     <div class="container">
         <div class="row row-header">
             <div class="col-12 col-sm-6">
-                <h1>Specific Image</h1>
+                <h1>Signup Error detected</h1>
             </div>
             <div class="col-12 col-sm align-self-center">
-                <p>See information about the selected image below:</p>
+                <p>Something went wrong during Signup...</p>
             </div>
         </div>
     </div>
@@ -46,67 +46,59 @@
 
 <div class="container">
     <div class="row row-content align-items-center">
-        <div class="col col-md-4 col-sm-6">
-            <img src="../uploads/<%= info[0].filename %>" alt="<%= info[0].filename %>" width="200" height="200">
-        </div>
-        <div class="col col-md-8 col-sm-6">
-
-            <table class="table table-bordered">
-                <tbody>
-                <tr>
-                    <th scope="row">File Name</th>
-                    <td><%= info[0].filename %></td>
-                </tr>
-                <tr>
-                    <th scope="row">Username</th>
-                    <td><%= info[0].username %></td>
-                </tr>
-                <tr>
-                    <th scope="row">Upload Date</th>
-                    <td><%= info[0].uploadDate %></td>
-                </tr>
-                <tr>
-                    <th scope="row">Number of Likes</th>
-                    <td><p id="likes"></p></td>
-                </tr>
-                <tr>
-                    <th scope="row">Number of Comments</th>
-                    <td><p id="comments"></p></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col col-md-4 col-sm-6">
-            <button onclick="likeImage(`<%= info[0].filename %>`); setTimeout(function(){getTotalLikes(`<%= info[0].filename %>`)}, 100);" class="btn-success" id="liked">Like</button>
+        <div class="col col-sm-8">
+            <h2>Please make sure you follow the rules below:</h2>
         </div>
     </div>
-    <div class="row row-content align-items-center">
-        <div class="col">
-            <form action="/image/comment/`<%= info[0].filename %>`" method="post">
-                <div class="form-group row">
-                    <label for="comment" class="col col-md-8 col-sm-6 col-form-label">Add a comment?</label>
-                    <div class="col-md-12">
-                        <textarea class="form-control" id="textEntry" name="comment" rows="4"></textarea>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class=" col">
-                        <button onclick="postComment(`<%= info[0].filename %>`); setTimeout(function(){getTotalComments(`<%= info[0].filename %>`)}, 100);" type="button" class="btn btn-success">Submit</button>
-                    </div>
-                </div>
-                <div>
-                    <br>
-                    <h3>Comments:</h3>
-                </div>
-                <table class ="table table-bordered">
-                    <tbody>
-                    <tr id="display">
-                    </tr>
-                </table>
-            </form>
-        </div>
+    <div class="col  align-self-center">
+        <ul>
+            <li><strong>Firstname</strong> must contain letters only, and must be between 1 and 30 characters in length.</li>
+            <li><strong>Surname</strong> must contain letters only, and must be between 1 and 30 characters in length.</li>
+            <li><strong>Username</strong> must contain at least 1 letter and at least 1 number, 0 special characters, and must be at least 4 characters in length.</li>
+            <li><strong>Password</strong> must contain at least 1 letter, at least 1 number, at least 1 special character, and must be at least 8 characters in length.</li>
+        </ul>
+
     </div>
 </div>
+
+
+
+<div class="container">
+    <div class="row row-content">
+        <div class="col col-sm-4">
+            <h2>Want to try again?</h2>
+        </div>
+    </div>
+    <div class="col">
+        <form action="/signup" method="post">
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <input class="form-control" id="firstname" name="firstname" placeholder="First Name" type="text">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" id="surname" name="surname" placeholder="Surname" type="text">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <input class="form-control" name="username" placeholder="Username" type="text">
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" name="password" placeholder="Password" type="password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+        <p>Please click <a href="http://localhost:8082/home">here</a> to return home.</p>
+    </div>
+</div>
+
+
+
 
 <footer class="footer">
     <div class="container">
@@ -142,13 +134,8 @@
 </footer>
 
 </body>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-<script src="../ajax.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="../ajax.js" ></script>
 </html>
