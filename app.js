@@ -129,28 +129,40 @@ app.get("/upload", function(req, res){
 
 // route to upload images
 app.post("/upload", function(req, res) {
-    var file = req.files.upload;
-    var filename = file.name;
-    var username = req.session.user;
-    var dateOfUpload = new Date();
-    // var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES ("${filename}", "${username}", "${dateOfUpload}", "${0}","${0}")`;
-    // connection.query(sql, function(error, results){
-    var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES (?, ?, ?, ?, ?)`;
-    connection.query(sql,[filename, username, dateOfUpload, 0, 0], function(error, results){
-        if (error){
-            res.render("error.ejs");
-        }
-        else {
-            file.mv("assets/uploads/"+file.name);
-            res.render("reupload.ejs", {"myFile": file.name, "username": username});
-        }
-    })
+    if(req.files.upload){
+        var file = req.files.upload;
+        var filename = file.name;
+        var username = req.session.user;
+        var dateOfUpload = new Date();
+        // var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES ("${filename}", "${username}", "${dateOfUpload}", "${0}","${0}")`;
+        // connection.query(sql, function(error, results){
+
+        var sql = `INSERT INTO uploads (filename, username, uploadDate, totalLikes, totalComments) VALUES (?, ?, ?, ?, ?)`;
+        connection.query(sql,[filename, username, dateOfUpload, 0, 0], function(error, results){
+            if (error){
+                res.render("error.ejs");
+            }
+            else {
+                file.mv("assets/uploads/"+file.name);
+                res.render("reupload.ejs", {"myFile": file.name, "username": username});
+            }
+        })
+    }
+    res.render("upload.ejs", {"username": username})
+
 });
 
 // logout and redirect to home.
 app.get("/logout", function(req, res) {
-    req.session.destroy();
-    res.render("logout.ejs");
+    if(session.data){
+        console.log("sessiondarta")
+        req.session.destroy();
+        res.render("logout.ejs");
+    } else {
+        res.redirect("http://localhost:8082/login.html")
+    }
+    // req.session.destroy();
+    // res.render("logout.ejs");
 });
 
 
