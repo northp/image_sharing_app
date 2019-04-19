@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 18, 2019 at 12:51 PM
+-- Generation Time: Apr 19, 2019 at 07:07 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.10
 
@@ -49,7 +49,8 @@ INSERT INTO `comments` (`commenter`, `commented_image`, `comment`) VALUES
 ('pfmn91', 'player.png', 'Hey, nobody wants negativity here....'),
 ('ScarHe8d', 'player.png', 'Never fear! Harry Potter Scarhead boi is here!'),
 ('ScarHe8d', 'player.png', 'Meaning I liked your image...'),
-('ScarHe8d', 'wall.png', 'Deep');
+('ScarHe8d', 'wall.png', 'Deep'),
+('pfmn91', 'empty.png', 'REPOST');
 
 -- --------------------------------------------------------
 
@@ -71,7 +72,8 @@ INSERT INTO `likes` (`liker`, `liked_image`, `like_status`) VALUES
 ('murph08', 'barrel.png', 1),
 ('pfmn91', 'barrel.png', 1),
 ('ScarHe8d', 'player.png', 1),
-('ScarHe8d', 'wall.png', 1);
+('ScarHe8d', 'wall.png', 1),
+('pfmn91', 'empty.png', 1);
 
 -- --------------------------------------------------------
 
@@ -93,6 +95,7 @@ CREATE TABLE `uploads` (
 
 INSERT INTO `uploads` (`filename`, `username`, `uploadDate`, `totalLikes`, `totalComments`) VALUES
 ('barrel.png', 'murph08', '2019-04-18 13:19:20.405', 2, 6),
+('empty.png', 'pfmn91', '2019-04-19 07:23:16.098', 1, 1),
 ('player.png', 'pfmn91', '2019-04-18 13:20:36.282', 1, 4),
 ('victory_point.png', 'ScarHe8d', '2019-04-18 13:38:15.312', 0, 0),
 ('wall.png', 'ScarHe8d', '2019-04-18 13:37:59.326', 1, 1);
