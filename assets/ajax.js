@@ -1,7 +1,7 @@
 "use strict";
 
 
-
+// a function to display the total number of likes for a post
 function getTotalLikes(filename){
     $.ajax( {
             url: `http://localhost:8082/image/totalLikes/${filename}`,
@@ -16,6 +16,7 @@ function getTotalLikes(filename){
     )
 };
 
+// a function to display whether or not a user has previously liked a post
 function getLikeStatus(filename){
     $.ajax( {
             url: `http://localhost:8082/image/checkLikeStatus/${filename}`,
@@ -30,7 +31,7 @@ function getLikeStatus(filename){
     )
 };
 
-
+// a function to like an image post
 function likeImage(filename){
     $.ajax( {
             url: `http://localhost:8082/image/like/${filename}`,
@@ -46,7 +47,7 @@ function likeImage(filename){
 };
 
 
-
+// a function to get the total number of comments for an image
 function getTotalComments(filename){
     $.ajax( {
             url: `http://localhost:8082/image/totalComments/${filename}`,
@@ -61,6 +62,7 @@ function getTotalComments(filename){
     )
 };
 
+// a function to display all comments posted for an image
 function displayComments(filename){
     $.ajax( {
             url: `http://localhost:8082/image/getComments/${filename}`,
@@ -80,6 +82,7 @@ function displayComments(filename){
     )
 };
 
+// a function to post a comment
 function postComment(filename){
     $.ajax({
         url: `http://localhost:8082/image/comment/${filename}`,

@@ -147,8 +147,10 @@ app.post("/upload", function(req, res) {
                 res.render("reupload.ejs", {"myFile": file.name, "username": username});
             }
         })
+    }else {
+        res.render("upload.ejs", {"username": username});
     }
-    res.render("upload.ejs", {"username": username})
+
 
 });
 
